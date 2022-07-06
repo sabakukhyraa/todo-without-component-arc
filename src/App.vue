@@ -1,19 +1,27 @@
 <template>
   <h1>To Do List</h1>
-  <input 
-  @keydown.enter="addNewTodo"
-  type="text" 
-  class="input-text" 
-  id="inputText"
-  placeholder="Yapılacak işi yazınız..."
-  >
+
+  <div class="center">
+
+    <input
+    v-model="inputText"
+    @keydown.enter="addNewTodo(inputText)"
+    type="text"
+    class="input-text"
+    id="inputText"
+    placeholder="Yapılacak işi yazınız..."
+    >
+
+    <button @click="addNewTodo(inputText)" class="btn" style="padding: 24px 48px">Ekle</button>
+
+  </div>
 
   <div class="todo-s">
     <ul>
       <li class="todo" v-for="todoItem in todoList" :key="todoItem.id" :class=" {'bg-green' : todoItem.checked, 'bg-red' : !todoItem.checked} ">
         <div class="center">
-          <input class="check" type="checkbox" id="check" v-model="todoItem.checked">
-          <label class="todo-text" for="check">{{ todoItem.text }}</label>
+          <input class="check" type="checkbox" :id="todoItem.id" v-model="todoItem.checked">
+          <label class="todo-text" :for="todoItem.id">{{ todoItem.text }}</label>
         </div>
         <button @click="deleteItem(todoItem.id)" class="btn">Sil</button>
       </li>
@@ -44,12 +52,11 @@ export default {
     addNewTodo(event) {
       this.todoList.push({
         id : new Date().getTime(),
-        text : event.target.value,
+        text : event,
         checked : false
         }
       )
-      event.target.value = ""
-      console.log(this.todoList)
+      this.inputText = ""
     },
 
 
@@ -145,6 +152,7 @@ h1 {
 
 .todo-s ul {
   text-align: start;
+  padding-left: 0;
 }
 
 
