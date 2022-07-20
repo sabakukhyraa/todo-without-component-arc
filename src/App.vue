@@ -1,54 +1,39 @@
 <template>
   <h1>To Do List</h1>
 
-  <div class="center">
+  <TodoTextInput @add-todo="addNewTodo"></TodoTextInput>
 
-    <input
-    v-model="inputText"
-    @keydown.enter="addNewTodo(inputText)"
-    type="text"
-    class="input-text"
-    id="inputText"
-    placeholder="Yapılacak işi yazınız..."
-    >
-
-    <button @click="addNewTodo(inputText)" class="btn" style="padding: 24px 48px">Ekle</button>
-
-  </div>
-
-  <div class="todo-s">
-    <ul>
-      <li class="todo" v-for="todoItem in todoList" :key="todoItem.id" :class=" {'bg-green' : todoItem.checked, 'bg-red' : !todoItem.checked} ">
-        <div class="center">
-          <input class="check" type="checkbox" :id="todoItem.id" v-model="todoItem.checked">
-          <label class="todo-text" :for="todoItem.id">{{ todoItem.text }}</label>
-        </div>
-        <button @click="deleteItem(todoItem.id)" class="btn">Sil</button>
-      </li>
-    </ul>
-  </div>
-  <div class="counter">
-    <div>
-      <small class="green">Tamamlanan: {{ completedItemCount }}</small>
-      <small class="red">Tamamlanmamış: {{ unCompletedItemCount }}</small>
-    </div>
-    <small>Şuanda {{ todoList.length }} TODO var.</small>
-  </div>
+  <TodoList @instant-check="toggleCheckbox" @delete-todo-item="deleteItem" :itemList="todoList"></TodoList>
+  
+  <TodoInformation :uncompletedCount="unCompletedItemCount" :completedCount="completedItemCount" :itemCount="todoList.length"></TodoInformation>
 </template>
 
 
 
 <script>
+
+import TodoTextInput from "@/components/TodoTextInput.vue";
+import TodoInformation from "@/components/TodoInformation.vue";
+import TodoList from "@/components/TodoList.vue";
+
+
 export default {
+
+  components: {
+    TodoTextInput,
+    TodoInformation,
+    TodoList,
+},
+
   data() {
     return {
       todoList : [],
       count : 1,
-      inputText : ""
     }
   },
 
   methods : {
+
     addNewTodo(event) {
       this.todoList.push({
         id : new Date().getTime(),
@@ -56,25 +41,31 @@ export default {
         checked : false
         }
       )
-      this.inputText = ""
     },
-
 
     deleteItem(id) {
       this.todoList = this.todoList.filter(
         (i) => i.id !== id
       )
+    },
+
+    toggleCheckbox(id) {
+      this.todoList.find(i => i.id === id).checked = !this.todoList.find(i => i.id === id).checked
     }
+
   },
 
 
   computed : {
+
     completedItemCount () {
       return this.todoList.filter((i) => i.checked).length
     },
+
     unCompletedItemCount () {
       return this.todoList.filter((i) => !i.checked).length
-    }
+    },
+    
   },
 
 }
