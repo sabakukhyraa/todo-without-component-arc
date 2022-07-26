@@ -18,7 +18,7 @@
                     <input class="check" type="checkbox" :id="todoItem.id" @change="$emit('instant-check', todoItem.id)">
                     <label class="todo-text" :for="todoItem.id">{{ todoItem.text }}</label>
                 </div>
-                <button @click="$emit('delete-todo-item', todoItem.id)" class="btn">Sil</button>
+                <button @click="deleteItem(todoItem.id)" class="btn">Sil</button>
             </li>
         </ul>
     </div>        
@@ -33,6 +33,7 @@
             }
         },
         props: ["itemList"],
+        inject : ["todoList", "deleteItem"],
     }
 
     

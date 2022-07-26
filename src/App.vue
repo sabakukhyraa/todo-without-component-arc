@@ -23,14 +23,28 @@ export default {
     TodoTextInput,
     TodoInformation,
     TodoList,
-},
+  },
 
   data() {
     return {
-      todoList : [],
-      count : 1,
+      todoList : [
+        {id: 1, text: "Todo #1", checked: false},
+        {id: 2, text: "Todo #2", checked: false},
+        {id: 3, text: "Todo #3", checked: false},
+        {id: 4, text: "Todo #4", checked: false},
+        {id: 5, text: "Todo #5", checked: false},
+        {id: 6, text: "Todo #6", checked: false}
+
+      ],
     }
   },
+
+  provide() {
+    return {
+      todoList: this.todoList,
+      deleteItem: this.deleteItem
+    }
+  },  
 
   methods : {
 
@@ -69,7 +83,6 @@ export default {
   },
 
 }
-
 </script>
 
 
